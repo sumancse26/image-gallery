@@ -1,0 +1,85 @@
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Hind Siliguri', sans-serif;
+}
+.grid-container{
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+    gap: 10px;
+    padding: 10px 0;
+}
+.grid-container .gallery-title{
+    grid-column: 1 / -1;
+    border-bottom: 2px solid #f5f5f5;
+    height: 50px;
+    margin-bottom: 30px;
+}
+.grid-container .gallery-title h4, h6, button{
+    font-size: 16px;
+    letter-spacing: 1px;
+    margin: 0;
+    padding: 0;
+    line-height: 10px !important;
+}
+.grid-container .gallery-title button{
+    border: none;
+    background-color: unset !important;
+}
+.grid-container .gallery-title button:hover{
+    background-color: #ef4444 !important;
+    padding: 5px 10px;
+    border-radius: 10px;
+    color: #fff;
+}
+
+.grid-container img{
+    width: 100%;
+    border: 1px solid #e2e8f0;
+    z-index: 100;
+    height: 100%;
+    border-radius: 5px ;
+    object-fit: cover;
+    transition: all 0.3s ease;
+}
+.img-container::after {
+    content: '';
+    position: absolute;
+    background: transparent;
+    width: 100%;
+    height: 100%;
+    left: 0;
+    top: 0;
+    z-index: 99;
+    transition: all 0.3s ease;
+}
+.img-container:hover:after{
+    background-color: #00000042;
+}
+.grid-container .big-img{
+    grid-column: auto / span 2;
+    grid-row: auto / span 2;
+}
+.grid-container .img-container, .add-btn{
+    position: relative;
+    width: 100%;
+    height: 100%;
+    border-radius: 5px;
+}
+.grid-container .img-container .checkbox{
+    position: absolute;
+    top: 12px;
+    left: 12px;
+    z-index: 999;
+}
+.grid-container .img-container .container-checked{
+    opacity: .5;
+}
+.grid-container .add-img{
+    width:100%;
+    height: 100%;
+    border: 1px solid #e2e8f0;
+    object-fit:cover;
+
+}
