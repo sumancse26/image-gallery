@@ -1,18 +1,28 @@
-const Card = () => {
+//defining interface
+interface Image {
+    id: number;
+    imgName: string;
+  }
+
+  //defining props type
+type CardPropsType = {
+    imgInfo: {
+        id: number;
+        imgName: string;
+    };
+    handleCheckbox: (e: React.ChangeEvent<HTMLInputElement>, imgInfo: Image) => void;
+    index: number;
+}
+
+const Card = ({imgInfo, handleCheckbox, index}: CardPropsType) => {
+
+    const imgName = `images/${imgInfo.imgName}`
+    
     return (
         <>
-            {/* <div className="big-img img-container">
-                <img className="container-checked" src="images/image-1.webp" alt="Image" />
-                <input className="checkbox" type="checkbox"  />
-            </div> */}
-            <div className="img-container">
-                <img src="images/image-2.webp" alt="Image" />
-                <input className="checkbox" type="checkbox" />
-            </div>
-            <div className="d-flex flex-column align-items-center justify-content-center py-3 add-img">
-                <span className="material-symbols-outlined"> imagesmode </span>
-                
-                <button className="border-0 bg-transparent mt-2">Add Image</button>
+            <div className={index == 0 ? 'img-container big-img' : 'img-container'}>
+                <img src={imgName} alt="Image" />
+                <input className="checkbox" type="checkbox" onChange={(e) => handleCheckbox(e, imgInfo)}/>
             </div>
         </>
     )
