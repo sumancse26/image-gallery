@@ -22,7 +22,7 @@ const Card = ({imgInfo, handleCheckbox, index}: CardPropsType) => {
         <>
             <div className={index == 0 ? 'img-container big-img' : 'img-container'}>
                 <img src={imgName} alt="Image" />
-                <input className="checkbox" type="checkbox" onChange={(e) => handleCheckbox(e, imgInfo)}/>
+                <input className="input-checked" type="checkbox" onChange={(e) => handleCheckbox(e, imgInfo)}/>
             </div>
         </>
     )

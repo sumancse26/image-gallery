@@ -17,9 +17,12 @@ const Title = ({checkedImage, handleDeleteImage}: CheckedImgDataType) =>{
             <div className="gallery-title d-flex align-items-center justify-content-between p-3 mb-">
                 <div className="d-flex align-items-center">
                     <input type="checkbox"  checked={checkedImage.length ? true : false} onChange={() => {}}/>
-                    <h6 className="p-1"> <span >{checkedImage.length}</span> Files Selected</h6>
+                    <h6 className="p-1">{checkedImage.length} Files Selected</h6>
                 </div>
-                <button onClick={handleDeleteImage}>Delete Selected File</button>
+                <span>
+                    <a onClick={handleDeleteImage} >Delete Selected File</a>
+                </span>
+               
             </div>
         </>
     )

@@ -22,7 +22,9 @@ const App: React.FC = () => {
     useEffect(() => {
         //setting fetched data to state
         setTotalImage(imgData);
-        
+
+        const updatedImg = JSON.stringify(imgData);
+        localStorage.setItem('myData', updatedImg);
         return () => {}
    
     }, [])
