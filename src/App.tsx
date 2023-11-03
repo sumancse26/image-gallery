@@ -8,6 +8,7 @@ import Data from './db/ImgData';
 interface Image {
     id: number;
     imgName: string;
+    isChecked: boolean | null;
   }
 
 type InputChangeType = React.ChangeEvent<HTMLInputElement>;
@@ -31,9 +32,23 @@ const App: React.FC = () => {
 
     //getting checked data to state
     const handleCheckbox = (e: InputChangeType, imgInfo: Image) => {
+
         if(e.target.checked){
-            setCheckedImage((prev: Image[]) => [...prev, imgInfo])
+            const findIndex = totalImage.findIndex(item => item.id == imgInfo.id);
+            const updatedImg = {
+                ...imgInfo,
+                isChecked: true
+            }
+            totalImage[findIndex] = updatedImg
+            
+            setCheckedImage((prev: Image[]) => [...prev, updatedImg])
         }else{
+            const findIndex = totalImage.findIndex(item => item.id == imgInfo.id);
+            const updatedImg = {
+                ...imgInfo,
+                isChecked: false
+            }
+            totalImage[findIndex] = updatedImg
             const filtererImage = checkedImage.filter(item => item.id != imgInfo.id)
             setCheckedImage(filtererImage)
         }
@@ -48,7 +63,7 @@ const App: React.FC = () => {
 
   return (
     <>
-        <div className="grid-container container">
+        <div className="grid-container container px-5">
             {/* Title component */}
             <Title checkedImage={checkedImage} handleDeleteImage={handleDeleteImage} />
 

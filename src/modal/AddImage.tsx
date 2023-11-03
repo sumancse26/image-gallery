@@ -11,7 +11,8 @@ const AddImage = ({isModalOpen, addImageHandler}: AddImgProps) => {
 const [imgName, setImgName] = useState('')
     useEffect(() => {
         if(isModalOpen){
-            document.getElementById('add_image').showModal()
+            const dialogElement = document.getElementById('add_image') as HTMLDialogElement;
+            dialogElement.showModal();
         }
     },[isModalOpen])
 
@@ -30,7 +31,7 @@ const [imgName, setImgName] = useState('')
                     <h3 className="font-bold text-sm">Add Image!</h3>
                     <div className="modal-action">
                         <form method="dialog" className="w-100">
-                            <div>
+                            <div className="">
                                 <label className="block">
                                     <span className="sr-only">Choose Image</span>
                                     <input 
@@ -45,7 +46,7 @@ const [imgName, setImgName] = useState('')
                                     />
                                 </label>
                             </div>
-                            <div className="w-100 flex items-center justify-center gap-3">
+                            <div className="w-100 flex items-center justify-center gap-3 mt-5">
                                 <button className="btn text-sm" onClick={() => addImageHandler('', false)}>Close</button>
                                 <button className="btn text-sm" onClick={() => addImageHandler(imgName, false)}>Save</button>
                             </div>
@@ -54,8 +55,6 @@ const [imgName, setImgName] = useState('')
                 </div>
             </dialog>
         </>
-
   )
-
 }
 export default AddImage;

@@ -40,8 +40,12 @@
     height: 100%;
     border-radius: 5px ;
     object-fit: cover;
-    transition: all 0.3s ease;
+    transition: background-color 0.2;
 }
+.grid-container .checked-img {
+  opacity: 0.5;
+}
+
 .img-container::after {
     content: '';
     position: absolute;
@@ -51,7 +55,7 @@
     border-radius: 5px ;
     left: 0;
     top: 0;
-    z-index: 99;
+    z-index: 99;   
     transition: all 0.3s ease;
 }
 .img-container:hover:after{
