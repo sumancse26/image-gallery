@@ -1,3 +1,4 @@
+
 import "bootstrap/dist/css/bootstrap.min.css";
 import React, { useEffect, useState } from "react";
 import "./App.css";
@@ -84,18 +85,19 @@ const App: React.FC = () => {
 
     return (
         <>
-            <div className="grid-container container px-5">
+            <div className="root container px-5">
                 {/* Title component */}
                 <Title checkedImage={checkedImage} handleDeleteImage={handleDeleteImage} />
 
                 {/* Card component */}
 
-                <DragDropContext onDragEnd={onDragEnd}>
-                    <Droppable droppableId="droppable">
+                <DragDropContext onDragEnd={onDragEnd} >
+                    <Droppable droppableId="droppable" >
                         {(provided) => (
-                            <div {...provided.droppableProps} ref={provided.innerRef}>
+                            <div {...provided.droppableProps} ref={provided.innerRef} className="grid-container">
                                 {totalImage.map((singleImg, index) => (
                                     <Draggable key={singleImg.id} draggableId={"item-" + singleImg.id} index={index}>
+                                        
                                         {(provided) => (
                                             <div
                                                 className={index == 0 ? "img-container big-img" : "img-container"}
@@ -113,6 +115,7 @@ const App: React.FC = () => {
                                     </Draggable>
                                 ))}
                                 {provided.placeholder}
+                                <Button />
                             </div>
                         )}
                     </Droppable>
@@ -122,8 +125,8 @@ const App: React.FC = () => {
                     <Card imgInfo={singleImg} handleCheckbox={handleCheckbox} index={index} key={singleImg.id} />
                 ))} */}
 
+                
                 {/* Button component  */}
-                <Button />
             </div>
         </>
     );
