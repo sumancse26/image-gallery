@@ -1,22 +1,32 @@
-import 'bootstrap/dist/css/bootstrap.min.css';
-import React, { useEffect, useState } from 'react';
-import './App.css';
-import Button from './components/Button';
-import Card from './components/Card';
-import Title from './components/Title';
-import Data from './db/ImgData';
+import "bootstrap/dist/css/bootstrap.min.css";
+import React, { useEffect, useState } from "react";
+import "./App.css";
+import Button from "./components/Button";
+import Card from "./components/Card";
+import Title from "./components/Title";
+import Data from "./db/ImgData";
+
+import { DragDropContext, DragUpdate, Draggable, Droppable } from "react-beautiful-dnd";
 interface Image {
     id: number;
     imgName: string;
     isChecked: boolean | null;
-  }
+}
+
+// a little function to help us with reordering the result
+const reorder = (list: Image[], startIndex: number, endIndex: number) => {
+    const result = Array.from(list);
+    const [removed] = result.splice(startIndex, 1);
+    result.splice(endIndex, 0, removed);
+
+    return result;
+};
 
 type InputChangeType = React.ChangeEvent<HTMLInputElement>;
 
 //getting data
-const imgData = Data
+const imgData = Data;
 const App: React.FC = () => {
-    
     const [totalImage, setTotalImage] = useState<Image[]>([]);
     const [checkedImage, setCheckedImage] = useState<Image[]>([]);
 
@@ -25,62 +35,98 @@ const App: React.FC = () => {
         setTotalImage(imgData);
 
         const updatedImg = JSON.stringify(imgData);
-        localStorage.setItem('myData', updatedImg);
-        return () => {}
-   
-    }, [])
+        localStorage.setItem("myData", updatedImg);
+        return () => {};
+    }, []);
 
     //getting checked data to state
     const handleCheckbox = (e: InputChangeType, imgInfo: Image) => {
-
-        if(e.target.checked){
-            const findIndex = totalImage.findIndex(item => item.id == imgInfo.id);
+        if (e.target.checked) {
+            const findIndex = totalImage.findIndex((item) => item.id == imgInfo.id);
             const updatedImg = {
                 ...imgInfo,
                 isChecked: true
-            }
-            totalImage[findIndex] = updatedImg
-            
-            setCheckedImage((prev: Image[]) => [...prev, updatedImg])
-        }else{
-            const findIndex = totalImage.findIndex(item => item.id == imgInfo.id);
+            };
+            totalImage[findIndex] = updatedImg;
+
+            setCheckedImage((prev: Image[]) => [...prev, updatedImg]);
+        } else {
+            const findIndex = totalImage.findIndex((item) => item.id == imgInfo.id);
             const updatedImg = {
                 ...imgInfo,
                 isChecked: false
-            }
-            totalImage[findIndex] = updatedImg
-            const filtererImage = checkedImage.filter(item => item.id != imgInfo.id)
-            setCheckedImage(filtererImage)
+            };
+            totalImage[findIndex] = updatedImg;
+            const filtererImage = checkedImage.filter((item) => item.id != imgInfo.id);
+            setCheckedImage(filtererImage);
         }
-    }
+    };
 
     //deleting image
     const handleDeleteImage = () => {
-        const filteredArray = totalImage.filter(item => !checkedImage.includes(item));
-        setTotalImage(filteredArray)
-        setCheckedImage([])
-    }
+        const filteredArray = totalImage.filter((item) => !checkedImage.includes(item));
+        setTotalImage(filteredArray);
+        setCheckedImage([]);
+    };
 
-  return (
-    <>
-        <div className="grid-container container px-5">
-            {/* Title component */}
-            <Title checkedImage={checkedImage} handleDeleteImage={handleDeleteImage} />
+    const onDragEnd = (result: DragUpdate) => {
+        // dropped outside the list
+        if (!result.destination) {
+            return;
+        }
+        console.log(result);
+        const recordedItems = reorder(totalImage, result.source.index, result.destination.index) as Image[];
 
-            {/* Card component */}
+        console.log(recordedItems);
 
-            {
-                totalImage.map((singleImg, index) => ( 
-                    <Card
-                        imgInfo={singleImg} handleCheckbox={handleCheckbox} index={index}  key={singleImg.id}
-                    />
-            ))}
-            
-            {/* Button component  */}
-            <Button />
-        </div>
-    </>
-  )
-}
+        setTotalImage(recordedItems);
+    };
 
-export default App
+    return (
+        <>
+            <div className="grid-container container px-5">
+                {/* Title component */}
+                <Title checkedImage={checkedImage} handleDeleteImage={handleDeleteImage} />
+
+                {/* Card component */}
+
+                <DragDropContext onDragEnd={onDragEnd}>
+                    <Droppable droppableId="droppable">
+                        {(provided) => (
+                            <div {...provided.droppableProps} ref={provided.innerRef}>
+                                {totalImage.map((singleImg, index) => (
+                                    <Draggable key={singleImg.id} draggableId={"item-" + singleImg.id} index={index}>
+                                        {(provided) => (
+                                            <div
+                                                className={index == 0 ? "img-container big-img" : "img-container"}
+                                                ref={provided.innerRef}
+                                                {...provided.dragHandleProps}
+                                                {...provided.draggableProps}>
+                                                <Card
+                                                    imgInfo={singleImg}
+                                                    handleCheckbox={handleCheckbox}
+                                                    index={index}
+                                                    key={singleImg.id}
+                                                />
+                                            </div>
+                                        )}
+                                    </Draggable>
+                                ))}
+                                {provided.placeholder}
+                            </div>
+                        )}
+                    </Droppable>
+                </DragDropContext>
+
+                {/* {totalImage.map((singleImg, index) => (
+                    <Card imgInfo={singleImg} handleCheckbox={handleCheckbox} index={index} key={singleImg.id} />
+                ))} */}
+
+                {/* Button component  */}
+                <Button />
+            </div>
+        </>
+    );
+};
+
+export default App;
